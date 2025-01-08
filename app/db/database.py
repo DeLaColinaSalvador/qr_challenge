@@ -5,13 +5,9 @@ from dotenv import dotenv_values
 
 config = dotenv_values(".env")
 
-for key, value in config.items():
-    print(f"{key}: {value}")
-
 Base = declarative_base()
 
 DATABASE_URL = f'postgresql+psycopg2://{quote_plus(config["DB_USER"])}:{quote_plus(config["DB_PASSWORD"])}@{config["DB_HOST"]}/{config["DB_NAME"]}?sslmode=require'
-print(f'Database connection string: {DATABASE_URL}')
 
 engine = create_engine(DATABASE_URL)
 

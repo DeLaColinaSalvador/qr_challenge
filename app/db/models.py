@@ -32,7 +32,7 @@ class User(Base):
 class QRCode(Base):
     __tablename__ = 'QRCodes'
     uuid = Column(Integer, Sequence('qrcodes_id_seq'), primary_key=True)
-    url = Column(String(50), nullable=False)
+    url = Column(String(50), nullable=False, unique=True)
     color = Column(String(50))
     size = Column(String(50))
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
