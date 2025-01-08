@@ -1,7 +1,7 @@
 import jwt
 import datetime
 from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from app.db.models import User
@@ -14,7 +14,7 @@ ALGORITHM = "HS256"
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+http_bearer = HTTPBearer()
 
 def create_access_token(data: dict):
     """Generate JWT token"""
@@ -43,15 +43,14 @@ def authenticate_user(db: Session, email: str, password: str):
         return token
     return None
 
-def get_user_from_jwt(token: str = Depends(oauth2_scheme)) -> dict:
+
+def get_user_from_jwt(authorization: str = Depends(http_bearer)):
     try:
-        # Decode the JWT to get the user info (e.g., user UUID)
+        token = authorization.credentials  # JWT token is directly in authorization.credentials
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_uuid = payload.get("sub")  # Assuming 'sub' is used for user UUID
-        if user_uuid is None:
-            raise HTTPException(status_code=403, detail="User not found in token")
-        return user_uuid
+        print(payload)
+        return payload["uuid"]
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="JWT token has expired")
+        raise HTTPException(status_code=401, detail="Token has expired")
     except jwt.PyJWTError:
-        raise HTTPException(status_code=403, detail="Invalid JWT token")
+        raise HTTPException(status_code=401, detail="Invalid token")
