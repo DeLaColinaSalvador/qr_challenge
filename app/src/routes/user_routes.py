@@ -5,7 +5,6 @@ from app.db.database import get_db_session
 from app.db.schemas import UserCreateSchema , UserResponse
 from app.db.models import User
 from app.src.auth import register_user, authenticate_user
-from sqlalchemy.exc import IntegrityError
 
 router = APIRouter()
 

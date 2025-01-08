@@ -30,7 +30,7 @@ def update_qr_code_route(
     qr_uuid: int,
     data: QRCodeCreateSchema,
     db: Session = Depends(get_db_session),
-    user_uuid: str = Depends(get_user_from_jwt)
+    user_uuid: int = Depends(get_user_from_jwt)
 ):
     """
     Update an existing QR code for the authenticated user.
@@ -67,6 +67,8 @@ async def list_qr_codes(
     Returns:
         List of QR codes belonging to the user.
     """
+    
+    print(user_uuid)
     
     qr_codes = fetch_qr_codes_by_user(db, user_uuid)
     return {"qr_codes": qr_codes}

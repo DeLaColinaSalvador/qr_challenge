@@ -52,6 +52,7 @@ class Scan(Base):
     ip = Column(String(50))
     country = Column(String(50))
     timezone = Column(String(50))
+    created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
     
     qr_code = relationship('QRCode', back_populates='scans')
 

@@ -28,7 +28,7 @@ class UserCreateSchema(UserBaseSchema):
 
 
 class QRCodeCreateSchema(QRCodeBaseSchema):
-    user_uuid: int
+    pass
 
 
 class ScanCreateSchema(ScanBaseSchema):
