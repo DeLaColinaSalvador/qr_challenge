@@ -10,10 +10,10 @@ for key, value in config.items():
 
 Base = declarative_base()
 
-DATABASE_URL = f'postgresql+psycopg2://{quote_plus(config["DB_USER"])}:{quote_plus(config["DB_PASSWORD"])}@{config["DB_HOST"]}/{config["DB_NAME"]}'
+DATABASE_URL = f'postgresql+psycopg2://{quote_plus(config["DB_USER"])}:{quote_plus(config["DB_PASSWORD"])}@{config["DB_HOST"]}/{config["DB_NAME"]}?sslmode=require'
 print(f'Database connection string: {DATABASE_URL}')
 
-engine = create_engine("sqlite:///testqr.db")
+engine = create_engine(DATABASE_URL)
 
 # Create a sessionmaker bound to the engine
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

@@ -24,7 +24,7 @@ class ScanBaseSchema(BaseModel):
 # Create Schemas
 
 class UserCreateSchema(UserBaseSchema):
-    password_hash: str
+    password: str
 
 
 class QRCodeCreateSchema(QRCodeBaseSchema):
@@ -52,6 +52,10 @@ class QRCodeResponseSchema(QRCodeBaseSchema):
     created_at: datetime
     updated_at: datetime
     scans: List[ScanResponseSchema] = []
+
+    @property
+    def total_scans(self):
+        return len(self.scans)
 
     class Config:
         from_attributes = True
