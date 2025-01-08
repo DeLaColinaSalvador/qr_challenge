@@ -5,6 +5,7 @@ from app.db.database import get_db_session
 from app.db.schemas import UserCreateSchema , UserResponse
 from app.db.models import User
 from app.src.auth import register_user, authenticate_user
+import datetime
 
 router = APIRouter()
 
@@ -31,15 +32,14 @@ def register(user : UserCreateSchema, db: Session = Depends(get_db_session)):
     try:
         # Proceed with registering the new user
         new_user, token = register_user(db, user.email, user.password)
-
+        
         user_response = UserResponse(
             email=new_user.email,
             uuid=new_user.uuid,
-            created_at=new_user.created_at,
             qr_codes=new_user.qr_codes
         )
 
-        response = {"user": user_response, "token": token}
+        response = {"user": user_response.model_dump(), "token": token}
 
         return JSONResponse(status_code=status.HTTP_201_CREATED, content=response)
     
