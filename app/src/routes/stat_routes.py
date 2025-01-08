@@ -11,26 +11,31 @@ router = APIRouter()
 def total_scans(
         qr_uuid: int,
         db: Session = Depends(get_db_session),
-        user_uuid : int = Depends(get_user_from_jwt)
+        user_uuid: int = Depends(get_user_from_jwt)
     ):
     """
     Retrieve the total number of scans for a specific QR code.
     """
-    total = get_total_scans(db, qr_uuid)
-    return {"qr_uuid": qr_uuid, "total_scans": total}
-
+    try:
+        total = get_total_scans(db, qr_uuid, user_uuid)
+        return {"qr_uuid": qr_uuid, "total_scans": total}
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 @router.get("/details/{qr_uuid}")
 def scan_logs(
         qr_uuid: int,
         db: Session = Depends(get_db_session),
-        user_uuid : int = Depends(get_user_from_jwt)
+        user_uuid: int = Depends(get_user_from_jwt)
     ):
     """
     Retrieve detailed scan logs for a specific QR code (IP, country, timestamp).
     """
-    logs = get_scan_logs(db, qr_uuid)
-    return {
-        "qr_uuid": qr_uuid,
-        "scan_logs": logs,
-    }
+    try:
+        logs = get_scan_logs(db, qr_uuid, user_uuid)
+        return {
+            "qr_uuid": qr_uuid,
+            "scan_logs": logs,
+        }
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)

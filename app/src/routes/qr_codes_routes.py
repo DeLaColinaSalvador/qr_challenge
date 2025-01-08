@@ -45,11 +45,8 @@ def update_qr_code_route(
             detail=f"QR Code with UUID {qr_uuid} not found."
         )
         
-    if not qr_code.user_uuid == user_uuid:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Not authorized"
-        )
+    if qr_code.user_uuid != user_uuid:
+        raise HTTPException(status_code=401, detail="You are not authorized to update this QR code.")
     
     buffer = update_qr_code(db, qr_uuid, data.model_dump())
     return StreamingResponse(buffer, media_type="image/png", headers={
@@ -61,14 +58,7 @@ async def list_qr_codes(
     db: Session = Depends(get_db_session),
     user_uuid: str = Depends(get_user_from_jwt)
 ):
-    """
-    List all QR codes. Filtered by a specific user's UUID obtained from JWT.
-
-    Returns:
-        List of QR codes belonging to the user.
-    """
-    
-    print(user_uuid)
-    
     qr_codes = fetch_qr_codes_by_user(db, user_uuid)
+    if not qr_codes:
+        raise HTTPException(status_code=404, detail="No QR codes found for this user.")
     return {"qr_codes": qr_codes}
