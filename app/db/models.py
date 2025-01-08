@@ -14,13 +14,10 @@ class User(Base):
     qr_codes = relationship('QRCode', back_populates='user', cascade="all, delete-orphan")
 
     def set_password(self, password):
-        pwd_bytes = password.encode('utf-8')
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
-        self.password_hash = hashed_password.decode('utf-8')
+        self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         return
     
-    def verify_password(self, password):
+    def verify_password(self, password:str):
         password_byte_enc = password.encode('utf-8')
         hashed_password_bytes = self.password_hash.encode('utf-8')
         return bcrypt.checkpw(password_byte_enc, hashed_password_bytes)

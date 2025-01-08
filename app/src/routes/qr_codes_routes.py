@@ -53,7 +53,7 @@ def update_qr_code_route(
         "Content-Disposition": f"attachment; filename=updated_qr_code_{qr_uuid}.png"
     })
 
-@router.get("/list-qr/{uuid}")
+@router.get("/list-qr")
 async def list_qr_codes(
     db: Session = Depends(get_db_session),
     user_uuid: str = Depends(get_user_from_jwt)
