@@ -7,7 +7,7 @@ config = dotenv_values(".env")
 
 Base = declarative_base()
 
-DATABASE_URL = f'postgresql+psycopg2://{quote_plus(config["DB_USER"])}:{quote_plus(config["DB_PASSWORD"])}@{config["DB_HOST"]}/{config["DB_NAME"]}?sslmode=require'
+DATABASE_URL = f'postgresql+psycopg2://{quote_plus(config["DB_USER"])}:{quote_plus(config["DB_PASSWORD"])}@{config["DB_HOST"]}/{config["DB_NAME"]}'
 
 engine = create_engine(DATABASE_URL)
 
