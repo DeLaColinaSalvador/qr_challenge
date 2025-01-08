@@ -42,7 +42,7 @@ class ScanResponseSchema(ScanBaseSchema):
     uuid: int
     qr_uuid: int
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
@@ -57,14 +57,13 @@ class QRCodeResponseSchema(QRCodeBaseSchema):
     def total_scans(self):
         return len(self.scans)
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
 
 
 class UserResponse(UserBaseSchema):
     uuid: int
-    created_at: datetime
     qr_codes: List[QRCodeResponseSchema] = []
 
-    class Config:
+    class ConfigDict:
         from_attributes = True
