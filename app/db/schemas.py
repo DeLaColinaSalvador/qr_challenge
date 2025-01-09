@@ -53,14 +53,6 @@ class ScanBaseSchema(BaseModel):
             raise ValueError("Invalid IP address format.")
         return v
 
-    @field_validator("timezone")
-    def validate_timezone(cls, v):
-        # Basic validation for timezone (using a common timezone pattern)
-        timezone_regex = r"^[A-Za-z]+\/[A-Za-z_]+$"
-        if not re.match(timezone_regex, v):
-            raise ValueError("Invalid timezone format.")
-        return v
-
 
 # Create Schemas
 
