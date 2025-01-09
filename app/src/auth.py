@@ -2,7 +2,6 @@ import jwt
 import datetime
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from app.db.models import User
 from dotenv import dotenv_values
@@ -11,8 +10,6 @@ config = dotenv_values(".env")
 
 SECRET_KEY = config["SECRET_KEY"]
 ALGORITHM = "HS256"
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 http_bearer = HTTPBearer()
 

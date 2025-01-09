@@ -50,7 +50,7 @@ def update_qr_code_route(
     
     buffer = update_qr_code(db, qr_uuid, data.model_dump())
     return StreamingResponse(buffer, media_type="image/png", headers={
-        "Content-Disposition": f"attachment; filename=updated_qr_code_{qr_uuid}.png"
+        "Content-Disposition": "attachment; filename=updated_qr_code_.png"
     })
 
 @router.get("/list-qr")
