@@ -1,7 +1,7 @@
+import requests
 from sqlalchemy.orm import Session
 from app.db.models import QRCode, Scan
 from fastapi import HTTPException
-import geoip2.database
 
 def record_scan(db: Session, qr_uuid: int, client_ip: str):
     
@@ -33,15 +33,18 @@ def record_scan(db: Session, qr_uuid: int, client_ip: str):
 
 def get_country_and_timezone_from_ip(ip: str) -> dict:
     try:
-        with geoip2.database.Reader('/path/to/GeoLite2-City.mmdb') as reader:
-            # Use the 'city' method to retrieve detailed location information
-            response = reader.city(ip)
-            
-            country = response.country.name
-            timezone = response.location.time_zone if response.location.time_zone else "Unknown"
-            
-            return {"country": country, "timezone": timezone}
-    except Exception:
-        return {"country": "Unknown", "timezone": "Unknown"}
-
-
+        response = requests.get(f"http://ip-api.com/json/{ip}")
+        if response.status_code == 200:
+            data = response.json()
+            print(data)
+            if data["status"] == "success":
+                country = data.get("country", "Unknown")
+                timezone = data.get("timezone", "Unknown")
+                return {"country": country, "timezone": timezone}
+            else:
+                print(f"GeoIP lookup failed: {data.get('message', 'Unknown error')}")
+        else:
+            print(f"GeoIP API request failed with status code {response.status_code}")
+    except Exception as e:
+        print(f"GeoIP lookup failed: {e}")
+    return {"country": "Unknown", "timezone": "Unknown"}

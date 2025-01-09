@@ -28,9 +28,9 @@ async def scan_qr_code(
         response = RedirectResponse(url=redirect_url, status_code=status.HTTP_302_FOUND)
         
         # Add CORS headers
-        response.headers["Access-Control-Allow-Origin"] = "*"  # Adjust this to specific origins if needed
-        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"  # Allow methods that your frontend might use
-        response.headers["Access-Control-Allow-Headers"] = "*"  # Or specify the necessary headers
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "*"
         return response
     except HTTPException as e:
         raise e
